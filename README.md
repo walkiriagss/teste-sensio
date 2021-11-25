@@ -16,10 +16,10 @@ Com o código do backend executando, você deve:
 
 ```bash
 # Clone este repositório com a API
-$ git clone <https://github.com/walkiriagss/back.git>
+$ git clone <https://github.com/walkiriagss/teste-sensio.git>
 
 # Acesse a pasta do projeto backend no terminal/cmd
-$ cd back
+$ cd teste-sensio
 
 # Instale as dependências
 $ npm install
