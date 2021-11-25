@@ -11,7 +11,7 @@ export default function NavTabs() {
     <Box sx={{ width: '100%' }} className="navBar">
       <Tabs aria-label="nav tabs example">
         <img src={Logo} className="imgLogo"></img>
-        <Tab label="Clientes"href="/sobre"></Tab>
+        <Tab label="Clientes"href="/"></Tab>
         <Tab label="Cadastrar" href="/new"></Tab>
       </Tabs>
     </Box>

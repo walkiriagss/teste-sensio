@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import Customers from './Customers';
 import NewCustomers from './NewCustomer';
 import reportWebVitals from './reportWebVitals';
@@ -9,8 +8,7 @@ import { BrowserRouter, Router,  Routes, Route } from 'react-router-dom'
 ReactDOM.render(
   <BrowserRouter>
         <Routes>
-            <Route path="/app" exact={true} element={<App/>} />
-            <Route path="/sobre" element={<Customers/>} />
+            <Route path="/" element={<Customers/>} />
             <Route path="/new" element={<NewCustomers/>} />
         </Routes>
     </ BrowserRouter>,
