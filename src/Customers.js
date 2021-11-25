@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect, useState} from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,58 +10,21 @@ import TableRow from '@mui/material/TableRow';
 import Container from '@mui/material/Container';
 import Navbar from './Navbar';
 import Typography from '@mui/material/Typography';
+import api from "./Services/Api.js";
 
 const columns = [
-  { id: 'name', label: 'Nome', minWidth: 170 },
-  { id: 'code', label: 'Razão Social', minWidth: 100 },
-  {
-    id: 'population',
-    label: 'CNPJ',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'size',
-    label: 'Endereço',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'density',
-    label: 'Atividade Primária',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
+
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
+function createData(cnpj, razao, ativ, endereco) {
+  return { cnpj, razao, ativ, endereco };
 }
 
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
-];
+
 
 export default function Customers() {
   const [page, setPage] = React.useState(0);
+  const [empresa, setEmpresa] = useState([]);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (event, newPage) => {
@@ -72,6 +35,13 @@ export default function Customers() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  useEffect(() => {
+    api.get('clientes').then((response) => {
+      setEmpresa(response.data)    
+    });
+  }, []);
+  
 
   return (
    
@@ -86,33 +56,77 @@ export default function Customers() {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
                 <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth, backgroundColor:"#B0C4DE", fontWeight:'bold' }}
+                  key="cnpj"
+                  style={{ minWidth: 170, backgroundColor:"#B0C4DE", fontWeight:'bold' }}
                 >
-                  {column.label}
+                 CNPJ
                 </TableCell>
-              ))}
+                <TableCell
+                  key="nome"
+                  style={{ minWidth: 170, backgroundColor:"#B0C4DE", fontWeight:'bold' }}
+                >
+                Nome
+                </TableCell>
+                <TableCell
+                  key="razao"
+                  style={{ minWidth: 170, backgroundColor:"#B0C4DE", fontWeight:'bold' }}
+                >
+                 Razão Social
+                </TableCell>
+                <TableCell
+                  key="ativ"
+                  style={{ minWidth: 170, backgroundColor:"#B0C4DE", fontWeight:'bold' }}
+                >
+                 Atividade Primária
+                </TableCell>
+                <TableCell
+                  key="endereco"
+                  style={{ minWidth: 170, backgroundColor:"#B0C4DE", fontWeight:'bold' }}
+                >
+                 Endereço
+                </TableCell>
+
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {empresa
               .map((row) => {
+                var i;
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
-                            ? column.format(value)
-                            : value}
-                        </TableCell>
-                      );
-                    })}
+                  <TableRow >
+                      <TableCell
+                        id="cnpj"
+                        style={{ minWidth: 170}}
+                      >
+                      {row.cnpj}
+                      </TableCell>
+
+                      <TableCell
+                        id="nome"
+                        style={{ minWidth: 170}}
+                      >
+                      {row.nome}
+                      </TableCell>
+                      <TableCell
+                        id="razao"
+                        style={{ minWidth: 170}}
+                      >
+                      {row.razao}
+                      </TableCell>
+                      <TableCell
+                        id="ativ"
+                        style={{ minWidth: 170}}
+                      >
+                      {row.atividade}
+                      </TableCell>
+                      <TableCell
+                        id="endereco"
+                        style={{ minWidth: 170}}
+                      >
+                      {row.bairro}
+                      </TableCell>
+
                   </TableRow>
                 );
               })}
@@ -122,7 +136,7 @@ export default function Customers() {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={rows.length}
+        count={empresa.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
